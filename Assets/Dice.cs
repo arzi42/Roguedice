@@ -37,6 +37,8 @@ public class Dice : MonoBehaviour
 	// Use this for initialization
 	void Awake () 
 	{
+		Debug.Log("dice awake");
+
 		camTransform = Camera.main.transform;
 	}
 	
@@ -68,10 +70,14 @@ public class Dice : MonoBehaviour
 
 			if(enemy == null)
 			{
+				UI.instance.Moved();
+
 				StartCoroutine(LerpToRotation(new Vector3(moveDirection.z * 90, 0, moveDirection.x * -90), moveDirection));
 			}
 			else
 			{
+
+
 				StartCoroutine(Attack(enemy));
 			}
 		}
@@ -179,4 +185,5 @@ public class Dice : MonoBehaviour
 
 		return 0;
 	}
+
 }

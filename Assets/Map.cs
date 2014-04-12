@@ -47,6 +47,8 @@ public class Map : MonoBehaviour
 
 	void Awake()
 	{
+		Debug.Log("awake");
+		 
 		instance = this;
 
 		FindEnemies();
@@ -57,20 +59,34 @@ public class Map : MonoBehaviour
 	{
 		map = new bool[width,height];
 
+		List<Vector3> positions = new List<Vector3>();
+
 		for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)
 			{
 				map[x,y] = true;
 				Instantiate(tile, new Vector3(x, 0, y), Quaternion.Euler(90, 0, 0));
+
+				if(x != 5 || y != 5)
+				{
+					positions.Add(new Vector3(x, 0, y));
+				}
 			}
 		}
 
-		Vector3 enemyPosition = new Vector3(Random.Range(0, width), 0, Random.Range(height - 4, height));
+		for(int i = 0; i < 3; i++)
+		{
+			int index = Random.Range(0, positions.Count);
 
-		Enemy enemy = (Enemy) Instantiate(enemyPrefab, enemyPosition, enemyPrefab.transform.rotation);
+			Vector3 enemyPosition = positions[index];
 
-		enemy.power = Random.Range(2, 6);
+			positions.RemoveAt(index);
+
+			Enemy enemy = (Enemy) Instantiate(enemyPrefab, enemyPosition, enemyPrefab.transform.rotation);
+
+			enemy.power = Random.Range(2, 6);
+		}
 
 		Instantiate(dice, new Vector3(5, 0.5f, 5), Quaternion.identity);
 
