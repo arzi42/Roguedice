@@ -12,6 +12,8 @@ public class Dice : MonoBehaviour
 	 * 6 = 90 0 0 
 	 */ 
 
+	public AnimationCurve attackCurve;
+
 	private int[][] rotationToResult = new int[][] 
 	{
 		new int[] { -90, 0 }, 
@@ -29,6 +31,8 @@ public class Dice : MonoBehaviour
 
 	private bool isTurning;
 	private bool isMoving;
+
+	private int currentPower;
 
 	// Use this for initialization
 	void Awake () 
@@ -75,10 +79,36 @@ public class Dice : MonoBehaviour
 
 	private IEnumerator Attack(Enemy target)
 	{
-		for(float t = 0; t < 1f; t+= Time.deltaTime)
+		Vector3 position = transform.position;
+
+		isMoving = true;
+
+		bool attacked = false;
+
+		for(float t = 0; t < 1f; t+= Time.deltaTime * 2f)
 		{
+			position.y = attackCurve.Evaluate(t) + 0.5f;
+
+			transform.position = position;
+
+			if(!attacked && t > 0.5f)
+			{
+				if(currentPower > target.power)
+				{
+					target.Hit();
+				}
+
+				attacked = true;
+			}
+
 			yield return null;
 		}
+
+		position.y = 0.5f;
+
+		isMoving = false;
+
+		transform.position = position;
 	}
 
 	private IEnumerator LerpCamera(Vector3 angles)
@@ -130,7 +160,9 @@ public class Dice : MonoBehaviour
 
 		if(x == 270) x = -90;
 
-		Debug.Log("x = " + x + " z = " + z + " result = " + GetResult(x, z));
+		currentPower = GetResult(x, z);
+
+		//Debug.Log("x = " + x + " z = " + z + " result = " + );
 
 		isMoving = false;
 	}

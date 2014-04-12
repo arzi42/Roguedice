@@ -27,6 +27,11 @@ public class Enemy : MonoBehaviour
 		powerText.text = _power.ToString();
 	}
 
+	public void Hit()
+	{
+		Destroy(gameObject);
+	}
+
 	void Awake()
 	{
 		powerText = GetComponentInChildren<TextMesh>();

@@ -23,12 +23,15 @@ public class Map : MonoBehaviour
 	{
 		foreach(Enemy enemy in enemies)
 		{
-			int ex = Mathf.RoundToInt(enemy.transform.position.x);
-			int ey = Mathf.RoundToInt(enemy.transform.position.z);
-
-			if(ex == x && ey == y)
+			if(enemy != null)
 			{
-				return enemy;
+				int ex = Mathf.RoundToInt(enemy.transform.position.x);
+				int ey = Mathf.RoundToInt(enemy.transform.position.z);
+
+				if(ex == x && ey == y)
+				{
+					return enemy;
+				}
 			}
 		}
 
